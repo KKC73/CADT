@@ -781,19 +781,14 @@ void take_a_quiz(string quiz_name){
         cout << "\t\t***Enter \"q\" to cancel***\n" << endl;
         do{
             cout << "\t\tEnter your answer: "; cin >> user_ans;
-            cout << "\t\tUser Input: " << user_ans[0] << endl;
 
         } while(!((user_ans[0] >= 'A' && user_ans[0] <= 'D') || (user_ans[0] >= 'a' && user_ans[0] <= 'd')));
         cor_ans = dequeue(my_queue);
 
         transform(cor_ans.begin(), cor_ans.end(), cor_ans.begin(), ::toupper);
-        cout << "Initial: " << cor_ans << endl;
-        for(int i=0; i< 4; i++){
-            cout << " ***" << num[i]<< "***" << endl;
-        }
-        cout << cor_ans[0] << endl;
+
         cor_ans[0] = char(is_element_in_num_arr(order_track, cor_ans[0] - 65) + 65);
-        cout << "Change: " << cor_ans << endl;
+
         //is_element_in_arr(num, 4, int)
         //cor_ans = ;
         transform(user_ans.begin(), user_ans.end(), user_ans.begin(), ::toupper);
