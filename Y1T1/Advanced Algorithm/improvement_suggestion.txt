@@ -1,0 +1,26 @@
+deletion confirmation
+make the credential files unreadable
+header for files (what column stores what)
+an admin can't delete himself
+
+********
+question setting
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+admin can change num of questions
+possibly add timer for easy mode, medium mode, hard mode
+add subject to program
+shuffle answer

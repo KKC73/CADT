@@ -1,4 +1,5 @@
 a a 2
+mny math.txt 4.0
 a a 3
 a a 4
 b j 2
@@ -7,3 +8,10 @@ x k 1
 a n 2
 fuck math.txt 0.5
 sdlkfj math.txt -2.5
+mny math.txt -0.5
+mny math.txt 0
+mny math.txt 1.5
+mny math.txt 0.5
+mny math.txt 0
+mny math.txt 0.5
+lkksd math.txt 0

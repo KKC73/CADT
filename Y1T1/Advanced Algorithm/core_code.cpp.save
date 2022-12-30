@@ -229,14 +229,14 @@ void sign_in(string privilege){
 
 void delete_credential(string file_path, string username){ // Removal of a user or an admin by an admin
     string sure = "n";
-
+    
     cout << "\n\t\t\nAre you sure?(Y/N) "; cin >> sure;
     cout << "\n";
 
     if(!sure.compare("N") || !sure.compare("n")){
         return;
     }
-
+    
     string * credential;
     credential = username_exists(username, "user_credential.txt");
     if(credential[0].compare("0") == 0){
