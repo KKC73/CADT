@@ -15,3 +15,10 @@ mny math.txt 0.5
 mny math.txt 0
 mny math.txt 0.5
 lkksd math.txt 0
+laskjfdlkas math.txt 2
+kjasl;dkf math.txt 0
+ab math.txt 1
+ab math.txt 1
+ab math.txt 4.5
+ab math.txt 0
+ab math.txt 0

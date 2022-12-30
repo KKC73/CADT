@@ -6,13 +6,27 @@
 #include <cstdlib>
 #include <chrono>
 #include <thread>
+#include <conio.h>
 #include "MyQueue.cpp"
 #include "caesar_cipher.cpp"
 //#include "file_op.cpp"
 string logged_in_as = "ab";
 int privilege_status;
+int real_case_q_num = 5;
 
 using namespace std;
+
+string star_password(){
+   string pass ="";
+   char ch;
+   ch = _getch();
+   while(ch != 13){//character 13 is enter
+      pass.push_back(ch);
+      cout << '*';
+      ch = _getch();
+   }
+   return pass;
+}
 
 void loarding_bar(string caption){
   int i;
@@ -159,10 +173,23 @@ string * username_exists(string username, string file_path){ // Fild username in
 }
 
 void new_user_prompt(string privilege){ // privilege is either user or admin
-    string username, password;
+    string username, password, re_password;
     string * credential;
     cout << "\t\tEnter a new username: "; cin >> username;
-    cout << "\t\tEnter a new password: "; cin >> password;
+    cout << "\n\t\tEnter 'q' to quit...\n";
+    do{
+        cout << "\t\tEnter a new password: "; password = star_password();
+        cout << endl;
+        if(password.compare("q") == 0){
+            return;
+        }
+        cout << "\t\tRe-enter the password: "; re_password = star_password();
+        if(re_password.compare("q") == 0){
+            return;
+        }
+        cout << endl;
+    } while(password.compare(re_password));
+
     password = encrypt(password);
     if(privilege.compare("admin") == 0){
         credential = username_exists(username, "admin_credential.txt");
@@ -195,10 +222,22 @@ void new_user_prompt(string privilege){ // privilege is either user or admin
 void sign_in(string privilege){
     // Successful sign in: privilege.txt holds 1 for admin, 0 for user
     // Failed sign in: privilege.txt holds -1
-    string username, password;
+    string username, password, re_password;
     string * credential;
     cout << "\t\tEnter your username: "; cin >> username;
-    cout << "\t\tEnter your password: "; cin >> password;
+    cout << "\nEnter 'q' to quit...\n";
+    do{
+        cout << "\t\tEnter a new password: "; password = star_password();
+        cout << endl;
+        if(password.compare("q") == 0){
+            break;
+        }
+        cout << "\t\tRe-enter the password: "; re_password = star_password();
+        if(re_password.compare("q") == 0){
+            break;
+        }
+        cout << endl << endl;
+    } while(password.compare(re_password));
     if(privilege.compare("admin") == 0){
         credential = username_exists(username, "admin_credential.txt");
         credential[2] = decrypt(credential[2]);
@@ -229,14 +268,14 @@ void sign_in(string privilege){
 
 void delete_credential(string file_path, string username){ // Removal of a user or an admin by an admin
     string sure = "n";
-    
+
     cout << "\n\t\t\nAre you sure?(Y/N) "; cin >> sure;
     cout << "\n";
 
     if(!sure.compare("N") || !sure.compare("n")){
         return;
     }
-    
+
     string * credential;
     credential = username_exists(username, "user_credential.txt");
     if(credential[0].compare("0") == 0){
@@ -601,10 +640,55 @@ void add_q_to_queue(MyQueue * q_queue, string quiz_name_ori, int ID){
     original.close();
 }
 
+int * randomize_q(){
+    int limit = 4;
+
+    srand((unsigned) time(NULL));
+	// string * credential = new string[num_space];
+	int * num = new int[limit];
+	for(int i=0; i<limit; i++){
+        num[i] = 0;
+	}
+	int i = 0;
+	while(1){
+        int random_num = (rand() % 4) + 1;
+        if(!is_element_in_arr(num, limit, random_num)){
+            num[i] = random_num;
+            i++;
+        }
+        if(i == limit){
+            break;
+        }
+
+	}
+
+	for(int i=0; i<4; i++){
+        num[i] = num[i] - 1;
+    }
+
+	return num;
+}
+
+int is_element_in_num_arr(int arr[], int toSearch){
+    int i;
+    for(i=0; i<4; i++){
+        if(arr[i] == toSearch)
+        {
+             return i;
+        }
+    }
+}
 
 void take_a_quiz(string quiz_name){
 
     int cancel = 0, num_of_cor = 0;
+
+    ifstream QNum;
+    QNum.open("QNum.txt");
+    if(QNum){
+        QNum >> real_case_q_num;
+        QNum.close();
+    }
 
     MyQueue *my_queue = createEmptyQueue();
     int q_num = get_num_of_q(quiz_name);
@@ -631,10 +715,8 @@ void take_a_quiz(string quiz_name){
 
     fstream quiz_file;
 
-    int real_case_q_num;
-
-    if(q_num >= 5){
-            real_case_q_num = 5;
+    if(q_num >= real_case_q_num){
+            real_case_q_num = real_case_q_num;
         } else{
             real_case_q_num = q_num;
         }
@@ -646,36 +728,76 @@ void take_a_quiz(string quiz_name){
         add_q_to_queue(my_queue, quiz_name, random_ID[i]);
     }
 
+    string answer_list[4];
+    int *num;
+    num = randomize_q();
+    int order_track[4];
+
     for(int k=0; k<real_case_q_num; k++){
+        num = randomize_q();
         for(int i=1; i<=5; i++){
-            switch(i){
-            case 1:
+
+            if(i == 1){
                 cout << "\t\t\tQuestion " << k + 1 << endl;
                 cout << "\t\tID-"<< random_ID[k] << ": " << dequeue(my_queue) << endl;
-                break;
-            case 2:
-                cout << "\t\tA. " << ": " << dequeue(my_queue) << endl;
-                break;
-            case 3:
-                cout << "\t\tB. " << ": " << dequeue(my_queue) << endl;
-                break;
-            case 4:
-                cout << "\t\tC. " << ": " << dequeue(my_queue) << endl;
-                break;
-            case 5:
-                cout << "\t\tD. " << ": " << dequeue(my_queue) << endl;
-                break;
-            default:
-                break;
-
+            } else{
+                order_track[num[i-2]] = i-2;
+                answer_list[num[i-2]] = dequeue(my_queue);
             }
+
+//            switch(i){
+//            case 1:
+//                cout << "\t\t\tQuestion " << k + 1 << endl;
+//                cout << "\t\tID-"<< random_ID[k] << ": " << dequeue(my_queue) << endl;
+//                break;
+//            default:
+//                transform(cor_ans.begin(), cor_ans.end(), cor_ans.begin(), ::toupper);
+//                answer_list[integer_sequence[i-1]] = dequeue(my_queue);
+//                cout << answer_list[i-1] << " " << integer_sequence[i-1] << endl;
+//                break;
+//            case 2:
+//                cout << "\t\tA. " << ": " << dequeue(my_queue) << endl;
+//                break;
+//            case 3:
+//                cout << "\t\tB. " << ": " << dequeue(my_queue) << endl;
+//                break;
+//            case 4:
+//                cout << "\t\tC. " << ": " << dequeue(my_queue) << endl;
+//                break;
+//            case 5:
+//                cout << "\t\tD. " << ": " << dequeue(my_queue) << endl;
+//                break;
+//            default:
+//                break;
+//
+//            }
         }
+
+        for(int i = 0; i<4; i++){
+            cout << "\t\t" << char(65+i) << ". " << answer_list[i] << endl;
+        }
+
         cout << "\n\t\t***Enter \"s\" to skip (You can't come back)***" << endl;
         cout << "\t\t***Enter \"q\" to cancel***\n" << endl;
-        cout << "\t\tEnter your answer: "; cin >> user_ans;
+        do{
+            cout << "\t\tEnter your answer: "; cin >> user_ans;
+            cout << "\t\tUser Input: " << user_ans[0] << endl;
+
+        } while(!((user_ans[0] >= 'A' && user_ans[0] <= 'D') || (user_ans[0] >= 'a' && user_ans[0] <= 'd')));
         cor_ans = dequeue(my_queue);
-        transform(user_ans.begin(), user_ans.end(), user_ans.begin(), ::toupper);
+
         transform(cor_ans.begin(), cor_ans.end(), cor_ans.begin(), ::toupper);
+        cout << "Initial: " << cor_ans << endl;
+        for(int i=0; i< 4; i++){
+            cout << " ***" << num[i]<< "***" << endl;
+        }
+        cout << cor_ans[0] << endl;
+        cor_ans[0] = char(is_element_in_num_arr(order_track, cor_ans[0] - 65) + 65);
+        cout << "Change: " << cor_ans << endl;
+        //is_element_in_arr(num, 4, int)
+        //cor_ans = ;
+        transform(user_ans.begin(), user_ans.end(), user_ans.begin(), ::toupper);
+
         if(!user_ans.compare(cor_ans)){
             cout << "\n\t\tCorrect answer: " << cor_ans << endl;
             cout << "\t\tYour answer: " << user_ans << endl << endl;
@@ -941,6 +1063,13 @@ void print_out_attendance(){
     }
     attendace_read.close();
     wait();
+}
+
+void change_QNum(int NumChange){
+    fstream QNum;
+    QNum.open("QNum.txt", ios::out);
+    QNum << NumChange;
+    QNum.close();
 }
 
 change_password(string username, string new_password){

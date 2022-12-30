@@ -84,10 +84,11 @@ int admin_menu(){ // 3
     cout << "\t\tWhat do you want to do?" << endl;
     cout << "\t\t1. CRUD operation on quizzes" << endl;
     cout << "\t\t2. Generate report" << endl;
-    cout << "\t\t3. Add admin" << endl;
-    cout << "\t\t4. Add user" << endl;
-    cout << "\t\t5. Delete user" << endl;
-    cout << "\t\t6. Sign out" << endl;
+    cout << "\t\t3. Change question number for user" << endl;
+    cout << "\t\t4. Add admin" << endl;
+    cout << "\t\t5. Add user" << endl;
+    cout << "\t\t6. Delete user" << endl;
+    cout << "\t\t7. Sign out" << endl;
     // cout << "6. Go back" << endl;
     // Go back is not need bcuz this is already signed in used Sign out instead
     // old: cout << "Enter a number to choose: "; cin >> choice;
@@ -103,18 +104,30 @@ int admin_menu(){ // 3
         return 5;
         break;
     case 3:
+        // Change Question number
+        wait();
+        system("clear");
+        int NumChange;
+        cout << "\n\t\tHow many question do you want?" << endl;
+        cout << "\n\t\tThe current default value is" << real_case_q_num << endl;
+        NumChange = get_int_input();
+        real
+        change_QNum(NumChange);
+        return 3;
+        break;
+    case 4:
         // Add admin
         new_user_prompt("admin");
         wait();
         return 3;
         break;
-    case 4:
+    case 5:
         // Add user
         new_user_prompt("user");
         wait();
         return 3;
         break;
-    case 5:
+    case 6:
         // Delete user
         cout << "\t\tEnter a username to delete a user: ";
         cin >> username;
@@ -122,7 +135,7 @@ int admin_menu(){ // 3
         wait();
         return 3;
         break;
-    case 6:
+    case 7:
         // Change privilege.txt to "havent decided" and go back to zero_menu()
         // priv = change_read_privilege_file(-1, "change");
         privilege_status = -1;

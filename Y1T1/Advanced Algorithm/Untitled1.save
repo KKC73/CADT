@@ -1,0 +1,29 @@
+
+
+bool password(string a)
+{
+  int i=0,j=0,k=0,c;
+  char pw[10];
+  cout << "\n\t\t\t-->Password: " ;
+  for(i=0;i<10;i++)
+  {
+    pw[i]=getch();
+    if(pw[i]!='\r')
+    {
+      cout << "*";
+    }
+    else
+    {
+      pw[i]='\0';
+      break;
+    }
+  }
+  if(stricmp(a.c_str(),pw)==0)
+  {
+    return 1;
+  }
+  else
+  {
+    return 0;
+  }
+}
